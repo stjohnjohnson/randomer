@@ -10,8 +10,8 @@ import (
 )
 
 var (
+	offset    = 30
 	randrange = 10
-	offset    = 10
 )
 
 type randHandler struct {
