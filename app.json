@@ -1,0 +1,12 @@
+{
+  "name": "Randomer",
+  "description": "It just shows a random line",
+  "keywords": [
+    "go",
+    "randomer"
+  ],
+  "image": "heroku/go:1.6",
+  "mount_dir": "src/github.com/jer/randomer",
+  "website": "http://screwdriver.cd",
+  "repository": "http://github.com/jer/randomer"
+}
