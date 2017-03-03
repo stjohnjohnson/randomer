@@ -14,16 +14,10 @@ jobs:
             - vet: go vet ./...
             - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
             - test: go test ./...
-            - build: go build -a -o randomer
+            - build: go build -o randomer
             - functionaltest: "PORT=8080 ./randomer & curl localhost:8080"
     deploy:
         steps:
-            - heroku: |
-                wget https://cli-assets.heroku.com/branches/stable/heroku-linux-amd64.tar.gz -O heroku.tar.gz
-                mkdir -p /usr/local/lib
-                tar -xvzf heroku.tar.gz -C /usr/local/lib
-                /usr/local/lib/heroku/install
-            - herokuversion: heroku --version
             - setup_ssh: |
                 mkdir ~/.ssh
                 echo $HEROKU_SSH > ~/.ssh/id_rsa
