@@ -17,5 +17,8 @@ chmod 600 ~/.ssh/*
 echo Deploying to Heroku $HEROKU_APP
 git push -f "git@heroku.com:$HEROKU_APP.git" HEAD:master
 
+echo Waiting for deployment to complete
+sleep 15
+
 export HEROKU_URL=https://$HEROKU_APP.herokuapp.com/
 echo Deployed to $HEROKU_URL
