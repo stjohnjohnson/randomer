@@ -1,41 +1,21 @@
-workflow:
-    - deploy
-
-shared:
-    image: golang
-    environment:
-        GOPATH: /sd/workspace
-        HEROKU_APP: screwdriver-demo
-        HEROKU_FINGERPRINT: 8b:48:5e:67:0e:c9:16:47:32:f2:87:0c:1f:c8:60:ad
-
 jobs:
     main:
+        image: golang
+        environment:
+            GOPATH: /sd/workspace
+            HEROKU_APP: screwdriver-demo
+            HEROKU_APP_PR: screwdriver-demo-pr
+            HEROKU_FINGERPRINT: 8b:48:5e:67:0e:c9:16:47:32:f2:87:0c:1f:c8:60:ad
         steps:
             - get: go get -t ./...
             - vet: go vet ./...
             - gofmt: "find . -name '*.go' | xargs gofmt -s -w"
-            - test: go test ./...
+            - unit-test: go test ./...
             - build: go build -o randomer
-            - functionaltest: "PORT=8080 ./randomer & curl localhost:8080"
-
-    # Deploy our application to Heroku
-    deploy:
-        steps:
-            - setup-ssh: |
-                mkdir ~/.ssh
-                echo Adding Heroku.com to Known Hosts
-                ssh-keyscan -H heroku.com >> ~/.ssh/known_hosts
-
-                echo Validating fingerprint
-                ssh-keygen -l -f ~/.ssh/known_hosts | grep $HEROKU_FINGERPRINT
-
-                echo Adding RSA key
-                echo $HEROKU_SSH > ~/.ssh/id_rsa
-                chmod 600 ~/.ssh/*
-
-            - deploy: |
-                echo Deploying to Heroku
-                git push -f "git@heroku.com:$HEROKU_APP.git" HEAD:master
-
+            - functional-test: "PORT=8080 ./randomer & curl localhost:8080"
+            - deploy: . ./ci/deploy.sh
+            - ui-test: . ./ci/saucelabs.sh
         secrets:
             - HEROKU_SSH
+            - SAUCE_KEY
+            - SAUCE_USER
