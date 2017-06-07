@@ -45,8 +45,15 @@ func main() {
 var html = `
 <!DOCTYPE html>
 <html>
+<head>
+	<title>Random Data Grapher</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
 <body>
-    <canvas id="widgetChart"></canvas>
+	<div class="container-fluid">
+		<h1 id="dotCount">0</h1>
+	    <canvas id="widgetChart"></canvas>
+	</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript">
@@ -88,6 +95,7 @@ var html = `
     setInterval(function(){
       $.ajax({ url: "data" }).done(function (newWidgets) {
         data.datasets[0].data.push(newWidgets.value);
+		$("#dotCount").text(newWidgets.value);
         data.labels.push(Date.now());
         if (data.labels.length > 30) {
           data.labels.shift();
