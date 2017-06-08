@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	offset    = 40
+	offset    = 10
 	randrange = 10
 )
 
